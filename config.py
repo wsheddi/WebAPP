@@ -13,13 +13,13 @@ class Config(object):
     SQL_DATABASE = os.environ.get('SQL_DATABASE') or 'cmsdb'
     SQL_USER_NAME = os.environ.get('SQL_USER_NAME') or 'Admin1'
     SQL_PASSWORD = os.environ.get('SQL_PASSWORD') or 'Wadha@10'
-    # Below URI may need some adjustments for driver version, based on your OS, if running locally
+
+    # Important: Make sure this line is properly indented inside the class!
     SQLALCHEMY_DATABASE_URI = (
-        'mssql+pyodbc://' +
-        SQL_USER_NAME + '@' + SQL_SERVER + ':' +
-        SQL_PASSWORD + '@' + SQL_SERVER + ':1433/' +
-        SQL_DATABASE + '?driver=ODBC+Driver+17+for+SQL+Server'
+        "mssql+pyodbc://Admin1:Wadha%4010@cmsdbserverwadha.database.windows.net:1433/cmsdb"
+        "?driver=ODBC+Driver+17+for+SQL+Server&Encrypt=yes"
     )
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # MSAL (Microsoft Authentication) Info
@@ -28,7 +28,5 @@ class Config(object):
     AUTHORITY = os.environ.get('AUTHORITY') or "https://login.microsoftonline.com/2c86bbfc-8d04-41ff-a83a-942f075e0f60"
     REDIRECT_PATH = os.environ.get('REDIRECT_PATH') or "/getAToken"  # Must match your app registration
 
-    # Only need to read user profile for this app
     SCOPE = ["User.Read"]
-
     SESSION_TYPE = "filesystem"  # Token cache will be stored in server-side session
