@@ -14,28 +14,21 @@ class Config(object):
     SQL_USER_NAME = os.environ.get('SQL_USER_NAME') or 'Admin1'
     SQL_PASSWORD = os.environ.get('SQL_PASSWORD') or 'Wadha@10'
     # Below URI may need some adjustments for driver version, based on your OS, if running locally
-    SQLALCHEMY_DATABASE_URI = 'mssql+pyodbc://' + SQL_USER_NAME + '@' + SQL_SERVER + ':' + SQL_PASSWORD + '@' + SQL_SERVER + ':1433/' + SQL_DATABASE  + '?driver=ODBC+Driver+17+for+SQL+Server'
+    SQLALCHEMY_DATABASE_URI = (
+        'mssql+pyodbc://' +
+        SQL_USER_NAME + '@' + SQL_SERVER + ':' +
+        SQL_PASSWORD + '@' + SQL_SERVER + ':1433/' +
+        SQL_DATABASE + '?driver=ODBC+Driver+17+for+SQL+Server'
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    ### Info for MS Authentication ###
-    ### As adapted from: https://github.com/Azure-Samples/ms-identity-python-webapp ###
-    CLIENT_SECRET = "bEZ8Q~mn9ueWDVxZMoBPpHsM7pcmsUwVh~QTPdbN"
-    # In your production app, Microsoft recommends you to use other ways to store your secret,
-    # such as KeyVault, or environment variable as described in Flask's documentation here:
-    # https://flask.palletsprojects.com/en/1.1.x/config/#configuring-from-environment-variables
-    # CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-    # if not CLIENT_SECRET:
-    #     raise ValueError("Need to define CLIENT_SECRET environment variable")
+    # MSAL (Microsoft Authentication) Info
+    CLIENT_SECRET = os.environ.get('CLIENT_SECRET') or "bEZ8Q~mn9ueWDVxZMoBPpHsM7pcmsUwVh~QTPdbN"
+    CLIENT_ID = os.environ.get('CLIENT_ID') or "9d2b1629-415e-460e-b635-eda4dbd1d0c9"
+    AUTHORITY = os.environ.get('AUTHORITY') or "https://login.microsoftonline.com/2c86bbfc-8d04-41ff-a83a-942f075e0f60"
+    REDIRECT_PATH = os.environ.get('REDIRECT_PATH') or "/getAToken"  # Must match your app registration
 
-  AUTHORITY = "https://login.microsoftonline.com/2c86bbfc-8d04-41ff-a83a-942f075e0f60"  # For multi-tenant app, else put tenant name
-    # AUTHORITY = "https://login.microsoftonline.com/Enter_the_Tenant_Name_Here"
-
-    CLIENT_ID = "9d2b1629-415e-460e-b635-eda4dbd1d0c9"
-
-    REDIRECT_PATH = "/getAToken"  # Used to form an absolute URL; must match to app's redirect_uri set in AAD
-
-    # You can find the proper permission names from this document
-    # https://docs.microsoft.com/en-us/graph/permissions-reference
-    SCOPE = ["User.Read"] # Only need to read user profile for this app
+    # Only need to read user profile for this app
+    SCOPE = ["User.Read"]
 
     SESSION_TYPE = "filesystem"  # Token cache will be stored in server-side session
